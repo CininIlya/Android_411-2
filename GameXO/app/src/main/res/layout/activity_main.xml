@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/lavander"
+    android:padding="40dp"
+    tools:context=".MainActivity">
+
+
+    <LinearLayout
+        android:layout_width="371dp"
+        android:layout_height="548dp"
+        android:background="@drawable/white_box"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="313dp"
+            android:layout_height="125dp"
+            android:layout_marginTop="20dp"
+            android:text="@string/enter_players_name"
+            android:textAllCaps="true"
+            android:textColor="@color/blue"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/playerOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:autofillHints="no"
+            android:background="@drawable/blue_bordedr"
+            android:drawableStart="@drawable/xicon"
+            android:ems="13"
+            android:hint="@string/enter_player_one_name"
+            android:inputType="text"
+            android:padding="12dp"
+            android:textColor="@color/blue"
+            android:textStyle="italic" />
+
+
+        <EditText
+            android:id="@+id/playerTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:autofillHints="no"
+            android:background="@drawable/blue_bordedr"
+            android:drawableStart="@drawable/yxicon"
+            android:ems="13"
+            android:hint="@string/enter_player_two_name"
+            android:inputType="text"
+            android:padding="12dp"
+            android:textColor="@color/blue"
+            android:textStyle="italic" />
+
+        <Button
+            android:id="@+id/startGameButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="@string/start_game"
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
+
+        <Button
+            android:id="@+id/button3X3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="3X3"
+            android:textColor="#FF5722"
+            android:textColorLink="#E91EA9"
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
+
+        <Button
+            android:id="@+id/button5X5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="5X5"
+            android:textColor="#D9C629"
+            android:textColorLink="#E91EA9"
+            android:textSize="18sp"
+            app:cornerRadius="20dp" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
