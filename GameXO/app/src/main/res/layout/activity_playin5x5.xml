@@ -58,7 +58,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/playerTwoNANE"
+                android:id="@+id/playerTwoName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -134,8 +134,8 @@
 
     <TableLayout
         android:id="@+id/tablelayot"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
+        android:layout_width="371dp"
+        android:layout_height="437dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.49"
@@ -308,42 +308,42 @@
 
         <TableRow
             android:layout_width="390dp"
-            android:layout_height="176dp">
+            android:layout_height="95dp">
 
             <ImageView
                 android:id="@+id/image15"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="8dp"
-                app:srcCompat="@drawable/white_box5x5"/>
+                app:srcCompat="@drawable/white_box5x5" />
 
             <ImageView
                 android:id="@+id/image16"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="8dp"
-                app:srcCompat="@drawable/white_box5x5"/>
+                app:srcCompat="@drawable/white_box5x5" />
 
             <ImageView
                 android:id="@+id/image17"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="8dp"
-                app:srcCompat="@drawable/white_box5x5"/>
+                app:srcCompat="@drawable/white_box5x5" />
 
             <ImageView
                 android:id="@+id/image18"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="8dp"
-                app:srcCompat="@drawable/white_box5x5"/>
+                app:srcCompat="@drawable/white_box5x5" />
 
             <ImageView
                 android:id="@+id/image19"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_margin="8dp"
-                app:srcCompat="@drawable/white_box5x5"/>
+                app:srcCompat="@drawable/white_box5x5" />
 
 
         </TableRow>

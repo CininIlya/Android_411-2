@@ -34,6 +34,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="PlayerOne"
+                android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
@@ -64,6 +65,7 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="PlayerTwo"
+                android:maxLines="1"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold" />
