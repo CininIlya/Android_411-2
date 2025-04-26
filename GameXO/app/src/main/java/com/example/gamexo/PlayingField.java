@@ -14,6 +14,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PlayingField extends AppCompatActivity {
 
@@ -22,7 +23,10 @@ public class PlayingField extends AppCompatActivity {
     private TextView playerOneName;
     private TextView playerTwoName;
 
+
+
     private int activePlayer = 1;
+
     private int[] boxPositions = {0, 0, 0, 0, 0, 0, 0, 0, 0};
     private int totalSelectBoxes = 1;
     private ImageView image1, image2, image3, image4, image5, image6, image7, image8, image9;
@@ -37,6 +41,7 @@ public class PlayingField extends AppCompatActivity {
 
         playerOneName = findViewById(R.id.playerOneName);
         playerTwoName = findViewById(R.id.playerTwoNANE);
+
 
         String getPlayerOneName = getIntent().getStringExtra("playerOne");
         String getPlayerTwoName = getIntent().getStringExtra("playerTwo");
@@ -71,14 +76,17 @@ public class PlayingField extends AppCompatActivity {
             public void onClick(View v) {
                 if (isBoxSelectable(0)) {
                     performAction((ImageView) v, 0);
+                    hodPc();
                 }
             }
         });
+
         image2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (isBoxSelectable(1)) {
                     performAction((ImageView) v, 1);
+                    hodPc();
                 }
             }
         });
@@ -87,7 +95,9 @@ public class PlayingField extends AppCompatActivity {
             public void onClick(View v) {
                 if (isBoxSelectable(2)) {
                     performAction((ImageView) v, 2);
+                    hodPc();
                 }
+
             }
         });
         image4.setOnClickListener(new View.OnClickListener() {
@@ -95,6 +105,7 @@ public class PlayingField extends AppCompatActivity {
             public void onClick(View v) {
                 if (isBoxSelectable(3)) {
                     performAction((ImageView) v, 3);
+                    hodPc();
                 }
             }
         });
@@ -103,6 +114,7 @@ public class PlayingField extends AppCompatActivity {
             public void onClick(View v) {
                 if (isBoxSelectable(4)) {
                     performAction((ImageView) v, 4);
+                    hodPc();
                 }
             }
         });
@@ -111,6 +123,7 @@ public class PlayingField extends AppCompatActivity {
             public void onClick(View v) {
                 if (isBoxSelectable(5)) {
                     performAction((ImageView) v, 5);
+                    hodPc();
                 }
             }
         });
@@ -119,6 +132,7 @@ public class PlayingField extends AppCompatActivity {
             public void onClick(View v) {
                 if (isBoxSelectable(6)) {
                     performAction((ImageView) v, 6);
+                    hodPc();
                 }
             }
         });
@@ -127,6 +141,7 @@ public class PlayingField extends AppCompatActivity {
             public void onClick(View v) {
                 if (isBoxSelectable(7)) {
                     performAction((ImageView) v, 7);
+                    hodPc();
                 }
             }
         });
@@ -135,6 +150,7 @@ public class PlayingField extends AppCompatActivity {
             public void onClick(View v) {
                 if (isBoxSelectable(8)) {
                     performAction((ImageView) v, 8);
+                    hodPc();
                 }
             }
         });
@@ -143,6 +159,9 @@ public class PlayingField extends AppCompatActivity {
 
     private void performAction(ImageView imageView, int SelectedBoxPosition) {
         boxPositions[SelectedBoxPosition] = activePlayer;
+
+
+
         imageView.setBackgroundResource(R.drawable.white_box);
         imageView.setScaleType(ImageView.ScaleType.CENTER);
 
@@ -176,10 +195,10 @@ public class PlayingField extends AppCompatActivity {
                 changePlayerTurn(2);
                 totalSelectBoxes++;
             }
-        } else {
-            imageView.setImageResource(R.drawable.oimage);
-
-            if (checkResults()) {
+//        } else {
+//            imageView.setImageResource(R.drawable.oimage);
+//
+        }if (checkResults()) {
                 ResildDialog resildDialog = new ResildDialog(PlayingField.this,
                         playerTwoName.getText().toString() + "is a Winner", PlayingField.this);
                 resildDialog.setCancelable(false);
@@ -189,17 +208,17 @@ public class PlayingField extends AppCompatActivity {
                 currentScoreTwo++;
                 scorePlayerB.setText(String.valueOf(currentScoreTwo));//подсчет очков игрока 2
 
-            } else if (totalSelectBoxes == 9) {
+        } else if (totalSelectBoxes == 9) {
 
-                ResildDialog resildDialog = new ResildDialog(PlayingField.this, "Match Draw", PlayingField.this);
-                resildDialog.setCancelable(false);
-                resildDialog.show();
-            } else {
-                changePlayerTurn(1);
-                totalSelectBoxes++;
-            }
+            ResildDialog resildDialog = new ResildDialog(PlayingField.this, "Match Draw", PlayingField.this);
+            resildDialog.setCancelable(false);
+            resildDialog.show();
+        } else {
+            changePlayerTurn(1);
+            totalSelectBoxes++;
         }
     }
+
 
     private boolean checkResults() {
         boolean response = false;
@@ -209,6 +228,7 @@ public class PlayingField extends AppCompatActivity {
             if (boxPositions[combination[0]] == activePlayer && boxPositions[combination[1]] == activePlayer && boxPositions[combination[2]] == activePlayer) {
                 response = true;
             }
+
 
         }
         return response;
@@ -262,5 +282,53 @@ public class PlayingField extends AppCompatActivity {
         image7.setImageResource(R.drawable.white_box);
         image8.setImageResource(R.drawable.white_box);
         image9.setImageResource(R.drawable.white_box);
+
+
+
+    }
+
+    private void hodPc() {
+        Random random = new Random();
+        int imagePcClick = 1 + random.nextInt(9);
+        switch (imagePcClick) {
+            case (1): if (image1.getDrawable() != null){
+                image1.setImageResource(R.drawable.oimage);
+            }else{hodPc();}
+           break;
+            case (2):if (image2.getDrawable() != null){
+                image2.setImageResource(R.drawable.oimage);
+            }else{hodPc();}
+                break;
+            case (3):if (image3.getDrawable() != null){
+                image3.setImageResource(R.drawable.oimage);
+            }else{hodPc();}
+                break;
+            case (4):if (image4.getDrawable() != null){
+                image4.setImageResource(R.drawable.oimage);
+            }else{hodPc();}
+                break;
+            case (5):if (image5.getDrawable() != null){
+                image5.setImageResource(R.drawable.oimage);
+            }else{hodPc();}
+                break;
+            case (6):if (image6.getDrawable() != null){
+                image6.setImageResource(R.drawable.oimage);
+            }else{hodPc();}
+                break;
+            case (7):if (image7.getDrawable() != null){
+                image7.setImageResource(R.drawable.oimage);
+            }else{hodPc();}
+                break;
+            case (8):if (image8.getDrawable() != null){
+                image8.setImageResource(R.drawable.oimage);
+            }else{hodPc();}
+                break;
+            case (9):if (image9.getDrawable() != null){
+                image9.setImageResource(R.drawable.oimage);
+            }else{hodPc();}
+                break;
+
+        }
     }
 }
+
