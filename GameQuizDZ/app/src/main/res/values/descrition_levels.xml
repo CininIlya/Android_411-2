@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name = "level_one"> Выбирете цифру, которая больше.\nВопросы могут повторятся, пока вы не наберете 20 очков. </string>
+
+</resources>
