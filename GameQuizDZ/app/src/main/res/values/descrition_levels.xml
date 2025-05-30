@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name = "level_one"> Сделайте правильный выбор .\n
-        Какое фото соответствует фамилии. </string>
+        Кто из артистов популярнее. </string>
     <string name = "level_one_end"> "Поздравляем уровень пройден!!!\n
      </string>
 </resources>
