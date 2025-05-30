@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="lvl1_text_0">Асти</string>
+    <string name="lvl1_text_1">Баста</string>
+    <string name="lvl1_text_2">Betsy</string>
+    <string name="lvl1_text_3">Лепс</string>
+    <string name="lvl1_text_4">Лазарев</string>
+    <string name="lvl1_text_5">Билан</string>
+    <string name="lvl1_text_6">Шаман</string>
+    <string name="lvl1_text_7">Кадышева</string>
+    <string name="lvl1_text_8">Расторгуев</string>
+    <string name="lvl1_text_9">Жуков</string>
+
+</resources>

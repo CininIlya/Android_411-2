@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:layout_margin="10dp"
-    android:background="@drawable/prev_lev_background_one"
+    android:background="@drawable/levelrtamka"
     android:orientation="vertical"
     android:scaleType="centerCrop"
 
@@ -14,55 +14,60 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="665dp"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:padding="20dp">
 
-        <TextView
-            android:id="@+id/button_close"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="center"
-            android:background="@drawable/btn_stroke_dark_red_press_white"
-            android:text="&lt;"
-            android:textStyle="bold"
-
-            />
-
         <ImageView
             android:id="@+id/priview_img"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_width="345dp"
+            android:layout_height="10dp"
             android:layout_marginTop="10dp"
-            android:layout_weight="60"
-            app:srcCompat="@drawable/number_lev_one" />
+            android:layout_weight="2"
+            app:srcCompat="@drawable/music" />
+
+        <TextView
+            android:id="@+id/button_close"
+            android:layout_width="91dp"
+            android:layout_height="34dp"
+            android:layout_gravity="center"
+            android:background="@drawable/btn_stroke_dark_red_press_white"
+            android:lineSpacingExtra="12sp"
+            android:rotationX="-6"
+            android:text="@string/back"
+            android:textAlignment="center"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/text_decrition"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="10dp"
-            android:layout_weight="30"
+            android:layout_width="318dp"
+            android:layout_height="316dp"
+            android:layout_marginTop="40dp"
+            android:layout_weight="1"
             android:text="@string/level_one"
+            android:textAlignment="center"
             android:textColor="@color/black_opacity"
-            android:textSize="24sp"
 
-            />
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button_continue"
             android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="10"
+            android:layout_height="7dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="0dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
             android:background="@drawable/btn_stroke_dark_red_press_white"
-            android:text="@string/text_continue"
-            android:textColor="@color/black_opacity"
-            android:paddingStart="20dp"
+            android:paddingStart="10dp"
             android:paddingEnd="20dp"
-            android:textSize="24sp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="20dp"
-            />
+            android:text="@string/text_continue"
+            android:textAlignment="center"
+            android:textColor="@color/black_opacity"
+            android:textSize="15sp" />
+
     </LinearLayout>
 </LinearLayout>

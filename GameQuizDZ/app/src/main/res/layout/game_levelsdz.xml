@@ -16,7 +16,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/bg" />
+        app:srcCompat="@drawable/levelrtamka2" />
 
     <LinearLayout
         android:id="@+id/container1"
@@ -43,16 +43,16 @@
                     android:id="@+id/button_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/button_stroke_black_opacity_press_white"
+                    android:background="@android:drawable/alert_dark_frame"
                     android:paddingStart="20dp"
                     android:paddingEnd="20dp"
                     android:text="@string/back"
                     android:textAllCaps="false"
-                    android:textColor="@color/black_opacity"
-                    android:layout_margin="10dp"
+                    android:textColor="@color/dark_red"
                     android:textSize="24sp" />
-</LinearLayout>
+            </LinearLayout>
                 <ScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">

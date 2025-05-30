@@ -5,8 +5,8 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/bg"
-    tools:context=".MainActivity">
+    android:background="@drawable/fon1"
+    tools:context=".MainActivitydz">
 
     <ImageView
         android:id="@+id/main_background"
@@ -17,20 +17,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/boy" />
+        app:srcCompat="@drawable/main" />
 
     <Button
         android:id="@+id/button_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/start"
-        android:textSize="24sp"
-        android:background="@drawable/button_stroke_black_opacity_press_white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/btn_game_levels"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
+        android:text="@string/start"
         android:textColor="@color/black_opacity"
-        app:layout_constraintTop_toBottomOf="@+id/main_background" />
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/main_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
