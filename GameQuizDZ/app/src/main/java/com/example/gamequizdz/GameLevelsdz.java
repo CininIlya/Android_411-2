@@ -93,5 +93,16 @@ public class GameLevelsdz extends AppCompatActivity {
             tv.setText(""+ (i+1));
 
         }
+        Button reset =findViewById(R.id.button_reset);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                SharedPreferences.Editor editor = save.edit();
+                editor.putInt("level",1);// кнопка сбросить перезаписывает значение фаило save на значение первого уровня
+                editor.apply();
+            }
+
+        });
     }
 }
