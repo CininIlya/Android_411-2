@@ -3,6 +3,7 @@ package com.example.gamequizdz;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -123,6 +124,16 @@ public class Level1dz extends AppCompatActivity {
 
             }
         });
+        Button button_continue_2 =dialogEnd.findViewById(R.id.button_continue);
+
+        button_continue_2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Level1dz.this,Level2dz.class);
+                startActivity(intent);
+                dialogEnd.dismiss();
+            }
+        });
 
         //--------------------------------------------------------
 
@@ -208,6 +219,15 @@ public class Level1dz extends AppCompatActivity {
                                 }
                             }
                             if (count == 20) {
+
+                                SharedPreferences save = getSharedPreferences("Save",MODE_PRIVATE);
+                                final int level = save.getInt("level",1);// сохранение данных игры уровней
+                                if(level <= 1){
+                                    SharedPreferences.Editor editor = save.edit();
+                                    editor.putInt("level",2);
+                                    editor.apply();
+                                }
+
                                 dialogEnd.show();// показать окно окончания
                                 // выход  из уровня если больше 20
                             } else {
@@ -280,6 +300,14 @@ public class Level1dz extends AppCompatActivity {
                                 }
                             }
                             if (count == 20) {
+
+                                SharedPreferences save = getSharedPreferences("Save",MODE_PRIVATE);
+                                final int level = save.getInt("level",1);// сохранение данных игры уровней
+                                if(level <= 1){
+                                    SharedPreferences.Editor editor = save.edit();
+                                    editor.putInt("level",2);
+                                    editor.apply();
+                                }
                                 dialogEnd.show();
                                 ; // выход  из уровня если больше 20
                             } else {
@@ -292,8 +320,8 @@ public class Level1dz extends AppCompatActivity {
                                     numleft = random.nextInt(10);
                                 } while (numleft == numRight);
                                 imgRight.setImageResource(array.image1[numRight]); // достаем из массива картинку
-                                imgRight.startAnimation(animation);// запускаем анимацию для левой картингки
-                                textRight.setText(array.text1[numRight]);// достаем из массива текст
+                                imgLeft.startAnimation(animation);// запускаем анимацию для левой картингки
+                                textLeft.setText(array.text1[numRight]);// достаем из массива текст
                                 imgLeft.setEnabled(true);// включаем обратно правую картинку
                             }
                         }

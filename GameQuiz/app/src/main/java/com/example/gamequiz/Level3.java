@@ -1,9 +1,8 @@
-package com.example.gamequizdz;
+package com.example.gamequiz;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -26,7 +25,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.Objects;
 import java.util.Random;
 
-public class Level2dz extends AppCompatActivity {
+public class Level2 extends AppCompatActivity {
 
     Dialog dialog;
     Dialog dialogEnd;
@@ -48,7 +47,7 @@ public class Level2dz extends AppCompatActivity {
 
         // Устанавливаем  номер уровня
         TextView textLevels = findViewById(R.id.textView);
-        textLevels.setText(R.string.level_2);
+        textLevels.setText(R.string.level_1);
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -74,24 +73,25 @@ public class Level2dz extends AppCompatActivity {
 
         dialog = new Dialog(this);// cjplftv lbfkjujt jtyj pltcm
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);// скрывает заголовок
-        dialog.setContentView(R.layout.privioew_dialofdz);
+        dialog.setContentView(R.layout.privioew_dialof);
         Objects.requireNonNull(dialog.getWindow()).setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));//прозрачный фон диалогового окна
         dialog.setCancelable(false);// не закрывать при кликам за пределами окна
 
         //Устанавливаем картивку в вимде диалогового окна
         ImageView previewImg = dialog.findViewById(R.id.priview_img);
-        previewImg.setImageResource(R.drawable.fon);
+        previewImg.setImageResource(R.drawable.number_lev_two);
 
         // Устанавливаем описание задания
         TextView text_decrition = dialog.findViewById(R.id.text_decrition);
         text_decrition.setText(R.string.level_two);
+
 
         // кнопка назад
         TextView btnClose = dialog.findViewById(R.id.button_close);
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Level2dz.this, GameLevelsdz.class);
+                Intent intent = new Intent(Level2.this, GameLevels.class);
                 startActivity(intent);
                 dialog.dismiss();//закрытие диалогового окна
 
@@ -109,7 +109,7 @@ public class Level2dz extends AppCompatActivity {
 
         dialog.show();//показать диалоговое окно
 
-// Вызов диалогового окна в конце игры
+        // Вызов диалогового окна в конце игры
 
         dialogEnd = new Dialog(this);
         dialogEnd.requestWindowFeature(Window.FEATURE_NO_TITLE);// скрываем заголовок
@@ -128,7 +128,7 @@ public class Level2dz extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // вернемся к выбору уровня
-                Intent intent = new Intent(Level2dz.this, GameLevelsdz.class);
+                Intent intent = new Intent(Level2.this, GameLevels.class);
                 startActivity(intent);
                 dialogEnd.dismiss();
 
@@ -140,25 +140,27 @@ public class Level2dz extends AppCompatActivity {
         button_continue_2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Level2dz.this, Level3dz.class);
+                Intent intent = new Intent(Level2.this, Level2.class);
                 startActivity(intent);
                 dialogEnd.dismiss();
             }
         });
 
         //--------------------------------------------------------
+
+
         // Кнопка Назад из окна с Уровнем
 
         Button btnBack = findViewById(R.id.button_back_level1);
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Level2dz.this, GameLevelsdz.class);
+                Intent intent = new Intent(Level2.this, GameLevels.class);
                 startActivity(intent);
             }
         });
 
-        final Animation animation = AnimationUtils.loadAnimation(Level2dz.this, R.anim.alfa); // подключение на уровент 1 созданный анимации в директори anim -alfa.xml
+        final Animation animation = AnimationUtils.loadAnimation(Level2.this, R.anim.alfa); // подключение на уровент 1 созданный анимации в директори anim -alfa.xml
 
         // генерация значение для левой картинки
         numleft = random.nextInt(10);
@@ -229,14 +231,8 @@ public class Level2dz extends AppCompatActivity {
                         }
                     }
                     if (count == 20) {
-                        SharedPreferences save = getSharedPreferences("Save",MODE_PRIVATE);
-                        final int level = save.getInt("leve2",2);// сохранение данных игры уровней
-                        if(level <= 2){
-                            SharedPreferences.Editor editor = save.edit();
-                            editor.putInt("level",3);
-                            editor.apply();
-                        }
                         dialogEnd.show();
+
                         ; // выход  из уровня если больше 20
                     } else {
                         numleft = random.nextInt(10);
@@ -248,23 +244,21 @@ public class Level2dz extends AppCompatActivity {
                         } while (numleft == numRight);
 
 
-                            imgRight.setImageResource(array.image2[numRight]); // достаем из массива картинку
-                            imgRight.startAnimation(animation);// запускаем анимацию для левой картингки
-                            textRight.setText(array.text2[numRight]);// достаем из массива текст
-                            imgRight.setEnabled(true);// включаем обратно правую картинку
-                        }
+                        imgRight.setImageResource(array.image2[numRight]); // достаем из массива картинку
+                        imgRight.startAnimation(animation);// запускаем анимацию для левой картингки
+                        textRight.setText(array.text2[numRight]);// достаем из массива текст
+                        imgRight.setEnabled(true);// включаем обратно правую картинку
                     }
-                    return true;
                 }
-            });
+                return true;
+            }
+        });
 
-            // обрабатываем нажатие на правую картинку
-        imgRight.setOnTouchListener(new View.OnTouchListener()
-
-            {
-                @SuppressLint("ClickableViewAccessibility")
-                @Override
-                public boolean onTouch (View v, MotionEvent event){
+        // обрабатываем нажатие на правую картинку
+        imgRight.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {// если коснулись картитнки переход на какую чуть ниже
                     imgLeft.setEnabled(false);// блокируем левую картинку
                     if (numleft < numRight) {
@@ -308,35 +302,29 @@ public class Level2dz extends AppCompatActivity {
                                 tv.setBackgroundResource(R.drawable.style_points_green);
                             }
                         }
-                        }
-                        if (count == 20) {
-                            SharedPreferences save = getSharedPreferences("Save",MODE_PRIVATE);
-                            final int level = save.getInt("level",2);// сохранение данных игры уровней
-                            if(level <= 2){
-                                SharedPreferences.Editor editor = save.edit();
-                                editor.putInt("level",3);
-                                editor.apply();
-                            }
-                            dialogEnd.show();
-                            ; // выход  из уровня если больше 20
-                        } else {
-                            numleft = random.nextInt(10);
-                            imgLeft.setImageResource(array.image2[numleft]); // достаем из массива картинку
-                            imgLeft.startAnimation(animation);// запускаем анимацию для левой картингки
-                            textLeft.setText(array.text2[numleft]);// достаем из массива текст
-
-                            do {
-                                numleft = random.nextInt(10);
-                            } while (numleft == numRight);
-                                imgRight.setImageResource(array.image2[numRight]); // достаем из массива картинку
-                                imgRight.startAnimation(animation);// запускаем анимацию для левой картингки
-                                textRight.setText(array.text2[numRight]);// достаем из массива текст
-                                imgLeft.setEnabled(true);// включаем обратно правую картинку
-                            }
-                        }
-
-                        return true;
                     }
-                });
+                    if (count == 20) {
+                        dialogEnd.show();
+
+                        ; // выход  из уровня если больше 20
+                    } else {
+                        numleft = random.nextInt(10);
+                        imgLeft.setImageResource(array.image2[numleft]); // достаем из массива картинку
+                        imgLeft.startAnimation(animation);// запускаем анимацию для левой картингки
+                        textLeft.setText(array.text2[numleft]);// достаем из массива текст
+
+                        do {
+                            numleft = random.nextInt(10);
+                        } while (numleft == numRight);
+                        imgRight.setImageResource(array.image2[numRight]); // достаем из массива картинку
+                        imgRight.startAnimation(animation);// запускаем анимацию для левой картингки
+                        textRight.setText(array.text2[numRight]);// достаем из массива текст
+                        imgLeft.setEnabled(true);// включаем обратно правую картинку
+                    }
+                }
+
+                return true;
             }
-            }
+        });
+    }
+}
