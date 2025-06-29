@@ -1,6 +1,5 @@
-package com.example.dzfragmetmenu;
+package com.example.fragmentmenuapplication2;
 
-import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.MenuItem;
 
@@ -33,16 +32,22 @@ public class MainActivity extends AppCompatActivity {
                 drawerLayout, materialToolbar, R.string.drawer_open, R.string.drawer_close);
                 drawerLayout.addDrawerListener(toogle);
 
-        replaceFragment(new com.example.dzfragmetmenu.FirstPage()); // первая страница
+        replaceFragment(new FirstPage()); // первая страница
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 if (item.getItemId() == R.id.first_page) {
-                    replaceFragment(new com.example.dzfragmetmenu.FirstPage());
+                    replaceFragment(new FirstPage());
                     drawerLayout.closeDrawer(GravityCompat.START);
                 } else if (item.getItemId() == R.id.second_page) {
                     replaceFragment(new SecondPage());
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }else if (item.getItemId() == R.id.third_page) {
+                    replaceFragment(new ThirdPage());
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                }else if (item.getItemId() == R.id.fourth_page) {
+                    replaceFragment(new FouthPage());
                     drawerLayout.closeDrawer(GravityCompat.START);
                 }
                 return false;
@@ -57,6 +62,5 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.frame_layout, fragment);
         fragmentTransaction.commit(); // переход на перевую страницу
     }
-
 
 }
