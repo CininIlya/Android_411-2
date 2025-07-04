@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    
+
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -16,8 +16,8 @@
             android:id="@+id/materialTollBar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/orange"
-            app:navigationIcon="@android:drawable/ic_media_rew"
+            android:background="@color/dark_green"
+            app:navigationIcon="@drawable/outline_accessible_menu_24"
             app:title="My Application"
             app:titleTextColor="@color/white"
             android:paddingTop="20dp"/>

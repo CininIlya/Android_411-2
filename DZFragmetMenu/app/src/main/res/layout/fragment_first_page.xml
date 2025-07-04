@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".FirstPagedz"
+    tools:context=".FirstPage"
     android:orientation="vertical">
 
 
@@ -44,6 +44,14 @@
         android:entries="@array/colors"
         android:background="@android:drawable/btn_dropdown"
         />
+    <ImageView
+        android:id="@+id/imageHonda"
+        android:layout_width="341dp"
+        android:layout_height="100dp"
+        android:layout_margin="30dp"
+        android:contentDescription="TODO"
+
+        />
 
     <Button
         android:id="@+id/button_find_description"
@@ -51,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:backgroundTint="@color/orange"
-        android:text="Определить цвет"
+        android:text="Марка Авто"
         android:textColor="@color/black"
         android:textSize="20sp" />
 
@@ -61,6 +69,8 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:layout_margin="30dp"/>
+
+
 
     <View
         android:id="@+id/divider2"
@@ -89,6 +99,8 @@
         android:textSize="30sp"
         android:layout_gravity="center"
         />
+
+
 
     <SeekBar
         android:id="@+id/seekBar2"

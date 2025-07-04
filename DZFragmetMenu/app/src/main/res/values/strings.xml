@@ -1,9 +1,54 @@
-<resources>
-    <string name="app_name">FragmentMenuAppl;ication</string>
-    <!-- TODO: Remove or change this placeholder text -->
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">FragmentMenuApplication2</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="drawer_close">Close Drawer</string>
     <string name="drawer_open">Open Drawer </string>
 
+    <string-array name="colors">
+        <item>honda</item>
+        <item>lexus</item>
+        <item>toyota</item>
+        <item>mazda</item>
+
+    </string-array>
+
+    <string-array name="colors_button">
+        <item>#9C27B0</item>
+        <item>#FF6100</item>
+        <item>yellow</item>
+        <item>green</item>
+    </string-array>
+
+
+
+
+<!--    <integer-array name="auto_button2">-->
+<!--        <item>@drawable/honda</item>-->
+<!--&lt;!&ndash;        <item>@drawable/my_engagement_icon_normal</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item>@drawable/my_payment_icon_normal</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item>@drawable/setting_icon_normal</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item>@drawable/about_icon_normal</item>&ndash;&gt;-->
+<!--&lt;!&ndash;        <item>@drawable/supprot_icon_normal</item>&ndash;&gt;-->
+<!--    </integer-array>-->
+
+
+    <string-array name="descriptiob_of_temp">
+
+        <item>Honda motors.Многие люди мечтают об успехе. Я считаю, что успех может быть достигнут только через повторяющиеся неудачи и самоанализ. Фактически успех — это только 1 процент вашей работы,
+             а остальные 99 процентов — это неудачи</item>
+        <item>Все начинается со смелой идеи: мы не ограничиваем себя в поиске источников вдохновения:
+            такой подход развивает оригинальность мышления и креативность.</item>
+        <item>ООО «Тойота Мотор» действует на территории России с 1 апреля 2002 года. Компания обладает исключительным правом на совершение операций, связанных с ввозом и распространением
+            на территории Российской Федерации автомобилей, запасных частей и аксессуаров Toyota и Lexus.</item>
+        <item>Идеал соблазнителен, но недостижим, поэтому наш путь к совершенству не закончится никогда. но уже сегодня можно оглянуться назад и увидеть его самые важные,
+            впечатляющие и памятные вехи. давайте сделаем это вместе.</item>
+
+    </string-array>
+<!--    <string-array name="foto" tools:ignore="InconsistentArrays">-->
+
+<!--        <item>@drawable/honda</item>-->
+
+
+<!--    </string-array>-->
 </resources>

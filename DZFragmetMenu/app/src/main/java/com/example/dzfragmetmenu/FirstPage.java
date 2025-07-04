@@ -3,15 +3,19 @@ package com.example.dzfragmetmenu;
 import static com.example.dzfragmetmenu.R.array.colors;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -21,8 +25,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.dzfragmetmenu.R;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class FirstPage extends Fragment {
@@ -41,6 +47,8 @@ public class FirstPage extends Fragment {
 
     ImageView imageView;
 
+    FloatingActionButton fab;
+
 
     @Override
 
@@ -52,7 +60,7 @@ public class FirstPage extends Fragment {
 
         ratingBar = view.findViewById(R.id.ratingBar);
         ratingButton = view.findViewById(R.id.rating_btn);
-
+        fab  = view.findViewById(R.id.fab);
 
         ratingButton.setOnClickListener(new OnClickListener() {
             @Override
@@ -73,10 +81,6 @@ public class FirstPage extends Fragment {
             @Override
             public void onClick(View v) {
                 int position = spinnerColors.getSelectedItemPosition();// вызов цветов из массива при выборе спиненпра
-
-
-
-
 
                 String descrition = getDesriptionPosition(position);//переменная в которую ложим значения позиции элемента массивыа
                 textViewDescrition.setText(descrition);
@@ -130,10 +134,69 @@ public class FirstPage extends Fragment {
 
             }
         });
+        fab.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBottomDialog();
+            }
+        });
 
         return view;
     }
+    private void showBottomDialog() { // Окошко при нажатии на плюс
 
+        final Dialog dialog = new Dialog(getContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottom_sheet_layout);
+
+        // получение доступа к созданным страницам
+
+        TextView second = dialog.findViewById(R.id.second);
+        TextView third = dialog.findViewById(R.id.third);
+        TextView fourth = dialog.findViewById(R.id.fourth);
+
+
+        second.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                replaceFragment (new SecondPage());
+            }
+        });
+
+        third.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                replaceFragment (new ThirdPage());
+            }
+        });
+
+        fourth.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+                replaceFragment (new FouthPage());
+            }
+        });
+
+        dialog.show();
+
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, // программно устанавливаем ширину и высоту меню окна при нажатии на плюсик
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));// прозрачный фон по низон окна
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;//
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+
+    }
+
+    private void replaceFragment(Fragment fragment) {
+        FragmentTransaction fragmentTransaction = getParentFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout,fragment); // Переход на вторую страницу
+        fragmentTransaction.commit();
+
+    }
     //  мЕТОД ВОЗРАЩАКТ СТРОКОРВОЕ ЗНАЧЕНИЕ ПРИНИМАЕТ ЧИСЛОВОЕ ЗНАЧЕНИЕ
     private String getDesriptionPosition(int position) {
         String[] description = getResources().getStringArray(R.array.descriptiob_of_temp);
