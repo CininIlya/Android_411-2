@@ -1,6 +1,10 @@
 package com.example.filemanagerprojectaplication.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -15,20 +19,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.Settings;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.filemanagerprojectaplication.FileAdapter;
+import com.example.filemanagerprojectaplication.OneFileSelectedListener;
 import com.example.filemanagerprojectaplication.R;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
-public class CardFragment extends Fragment {
+public class CardFragment extends Fragment implements OneFileSelectedListener {
 
     View view;
 
@@ -36,7 +48,17 @@ public class CardFragment extends Fragment {
     private List<File> fileList;
     private ImageView imgBackSD;
     private TextView tvPathHolder;
+
     File storage;
+
+    String pathToSD = "";
+    String[] items = {"Details", "Rename", "Delete"};
+
+    private FileAdapter fileAdapter;
+
+    File[] mmm;
+    File pathSD;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,17 +68,40 @@ public class CardFragment extends Fragment {
         imgBackSD = view.findViewById(R.id.img_backSD);
         tvPathHolder = view.findViewById(R.id.tv_patg_holder);
 
+        String externalStorage = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+        mmm = ContextCompat.getExternalFilesDirs(requireContext(), null);
+        if (mmm.length > 1 && mmm[1] != null) ;
+        pathSD = mmm[1];
+        String sss = mmm[1].getPath();
+        String[] path = sss.split("/");
+
+        if (path.length >= 3) {
+            pathToSD = path[0] + path[1] + "/" + path[2];
+
+
+            tvPathHolder.setText("Path SD: " + pathToSD);
+
+            pathSD = new File(pathToSD);
+            runtimePermission();
+
+
+        }
+        tvPathHolder.setText("Path(1) SD: " + "SD card ejected...");
+
         File[] externalDirs = ContextCompat.getExternalFilesDirs(getContext(), null);
-        if (externalDirs.length > 1 && externalDirs !=null){
+        if (externalDirs.length > 1 && externalDirs != null) {
             storage = new File(externalDirs[1].getAbsolutePath());
             tvPathHolder.setText("Встроенная память:" + storage.getAbsolutePath());
-            runtimePermission();
-            
-            
+
+
         }
+        tvPathHolder.setText(storage.getAbsolutePath());
+
+        runtimePermission();
 
 
-            return view;
+        return view;
 
 
     }
@@ -120,7 +165,7 @@ public class CardFragment extends Fragment {
                     singleFile.getName().toLowerCase().endsWith(".mp4") ||
                     singleFile.getName().toLowerCase().endsWith(".pdf") ||
                     singleFile.getName().toLowerCase().endsWith(".doc") ||
-                    singleFile.getName().toLowerCase().endsWith(".apk")){
+                    singleFile.getName().toLowerCase().endsWith(".apk")) {
                 arrayList.add(singleFile);
             }
         }
@@ -130,9 +175,110 @@ public class CardFragment extends Fragment {
     private void displayFiles() {
         recyclerView = view.findViewById(R.id.recycler_internal);
         recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
         fileList = new ArrayList<>();
-        fileList.addAll(findFiles(storage));
+        fileList.addAll(findFiles(pathSD));
+
+        fileAdapter = new FileAdapter(getContext(), fileList, this);
+        recyclerView.setAdapter(fileAdapter);
+    }
+
+    @Override
+    public void onFileClicked(File file) {
+        if (file.isDirectory()) {
+            Bundle bundle = new Bundle();
+            bundle.putString("path", file.getAbsolutePath());
+            internalragment internalragment = new internalragment();
+            internalragment.setArguments(bundle);
+
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_conteiner, internalragment)
+                    .addToBackStack(null).commit();
+        }
+    }
+
+    @Override
+    public void onFileLongClicked(File file) {
+        final Dialog optionDialog = new Dialog(getContext());
+        optionDialog.setContentView(R.layout.option_dialog);
+        optionDialog.setTitle("Select Options.");
+        ListView options = optionDialog.findViewById(R.id.list);
+
+        CustomAdapter customAdapter = new CustomAdapter();
+        options.setAdapter(customAdapter);
+        optionDialog.show();
+
+        options.setOnItemClickListener(new AdapterView.OnItemClickListener() {// установка на элементе  Details меню действие нажатие
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+
+                switch (selectedItem){
+                    case "Details":
+                        AlertDialog.Builder detailDialog = new AlertDialog.Builder(getContext());// нажатие на меню Details из контекста
+                        detailDialog.setTitle("Details:");
+                        final TextView details = new TextView(getContext());
+                        detailDialog.setView(details);
+                        Date lastModified = new Date(file.lastModified());
+                        SimpleDateFormat formatted = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                        String formattedDate = formatted.format(lastModified);
+
+                        details.setText(String.format("File Name:" + file.getName() + "\n" + "Size: " +
+                                Formatter.formatShortFileSize(getContext(),file.length()) +"\n" + "Path: "
+                                +  file.getAbsolutePath() +"\n" +"last Modified:" + formattedDate)); // Инфомация о фаиле по нажатию на менб details
+
+                        details.setPadding(70,10,10,10); // отступы в контекстн7ом меню
+
+                        detailDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                optionDialog.cancel();
+                            }
+                        });
+
+
+                        AlertDialog alertDialogDetails = detailDialog.create();
+                        alertDialogDetails.show();// показывает окно принажатии на details
+                        break;
+                }
+
+            }
+        });
+    }
+
+    class CustomAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return items.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return items[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {// меню для долгорго нажати я на кнопук мышки
+            @SuppressLint("ViewHolder") View myView = getLayoutInflater().inflate(R.layout.option_layout, null);
+
+            TextView txtOptions = myView.findViewById(R.id.txt_option);
+            ImageView imgOptions = myView.findViewById(R.id.img_option);
+            txtOptions.setText(items[position]);
+            if (items[position].equals("Details")) {
+                imgOptions.setImageResource(R.drawable.outline_chat_info_24);
+            } else if (items[position].equals("Rename")) {
+                imgOptions.setImageResource(R.drawable.outline_brush_24);
+            } else if (items[position].equals("Delete")) {
+                imgOptions.setImageResource(R.drawable.outline_delete_24);
+
+            }
+            return myView;
+        }
     }
 }
 

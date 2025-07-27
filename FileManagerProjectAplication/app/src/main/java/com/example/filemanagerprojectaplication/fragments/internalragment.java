@@ -1,6 +1,10 @@
 package com.example.filemanagerprojectaplication.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -16,23 +20,35 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Environment;
 import android.provider.Settings;
+import android.text.format.Formatter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.filemanagerprojectaplication.FileAdapter;
+import com.example.filemanagerprojectaplication.FileOpener;
+import com.example.filemanagerprojectaplication.OneFileSelectedListener;
 import com.example.filemanagerprojectaplication.R;
 
+import org.jetbrains.annotations.ApiStatus;
+
 import java.io.File;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Date;
 import java.util.List;
 
 
-public class internalragment extends Fragment {
+public class internalragment extends Fragment implements OneFileSelectedListener {
 
+    private FileAdapter fileAdapter;
     private RecyclerView recyclerView;
     private List<File> fileList;
     private ImageView imgBack;
@@ -40,7 +56,10 @@ public class internalragment extends Fragment {
 
     File storage; // возможность работать с файла внутри файловой     системе
 
+    String data;
     View view;
+
+    String[] items = {"Details", "Rename", "Delete"};
 
 
     @Override
@@ -54,6 +73,11 @@ public class internalragment extends Fragment {
         // Получать доступ к внутренней sd card
         String internalStorage = System.getenv("EXTERNAL_STORAGE");
         storage = new File(internalStorage);
+
+        if (getArguments() != null) {
+            data = getArguments().getString("path");// метод запуска фрагмента
+            storage = new File(data);
+        }
 
         tvPathHolder.setText(storage.getAbsolutePath());
 
@@ -78,29 +102,30 @@ public class internalragment extends Fragment {
                     PackageManager.PERMISSION_GRANTED) {// работает если не предоставлено разрешение
                 displayFiles();
             }
-            //// Разрешение до Андройд 11 и выше (API 30R)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                if (!Environment.isExternalStorageManager()) {
-                    try {
-                        Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
-                        Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                        intent.setData(uri);
-                        intent.addCategory("android.intent,category.DEFAULT");
-                        intent.setData(Uri.parse(String.format("package:%s", getActivity().getPackageCodePath())));
-                        getActivity().startActivityIfNeeded(intent, 101);// Метод позволяет запустить активность если требуется новый эжкземпляр 101 -
-                    } catch (Exception e) {
-                        Intent intent = new Intent();
-                        intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
-                        getActivity().startActivityIfNeeded(intent, 101);
-
-                    }
-                }
-                if (Environment.isExternalStorageManager()) {
-                    displayFiles();
+        }
+        //// Разрешение до Андройд 11 и выше (API 30R)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!Environment.isExternalStorageManager()) {
+                try {
+                    Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
+                    Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    intent.setData(uri);
+                    intent.addCategory("android.intent,category.DEFAULT");
+                    intent.setData(Uri.parse(String.format("package:%s", getActivity().getPackageName())));
+                    getActivity().startActivityIfNeeded(intent, 101);// Метод позволяет запустить активность если требуется новый эжкземпляр 101 -
+                } catch (Exception e) {
+                    Intent intent = new Intent();
+                    intent.setAction(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                    getActivity().startActivityIfNeeded(intent, 101);
 
                 }
             }
+            if (Environment.isExternalStorageManager()) {
+                displayFiles();
+
+            }
         }
+
 
     }
 
@@ -117,13 +142,13 @@ public class internalragment extends Fragment {
         for (File singleFile : files) {
             if (singleFile.getName().toLowerCase().endsWith(".jpeg") ||
                     singleFile.getName().toLowerCase().endsWith(".jpg") ||
-                            singleFile.getName().toLowerCase().endsWith(".png") ||
-                            singleFile.getName().toLowerCase().endsWith(".mp3") ||
-                            singleFile.getName().toLowerCase().endsWith(".wav") ||
-                            singleFile.getName().toLowerCase().endsWith(".mp4") ||
-                            singleFile.getName().toLowerCase().endsWith(".pdf") ||
-                            singleFile.getName().toLowerCase().endsWith(".doc") ||
-                            singleFile.getName().toLowerCase().endsWith(".apk")){
+                    singleFile.getName().toLowerCase().endsWith(".png") ||
+                    singleFile.getName().toLowerCase().endsWith(".mp3") ||
+                    singleFile.getName().toLowerCase().endsWith(".wav") ||
+                    singleFile.getName().toLowerCase().endsWith(".mp4") ||
+                    singleFile.getName().toLowerCase().endsWith(".pdf") ||
+                    singleFile.getName().toLowerCase().endsWith(".doc") ||
+                    singleFile.getName().toLowerCase().endsWith(".apk")) {
                 arrayList.add(singleFile);
             }
         }
@@ -131,11 +156,115 @@ public class internalragment extends Fragment {
     }
 
 
-private void displayFiles() {
-    recyclerView = view.findViewById(R.id.recycler_internal);
-    recyclerView.setHasFixedSize(true);
-    recyclerView.setLayoutManager(new GridLayoutManager(getContext(),2));
-    fileList = new ArrayList<>();
-    fileList.addAll(findFiles(storage));
-}
+    private void displayFiles() {
+        recyclerView = view.findViewById(R.id.recycler_internal);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        fileList = new ArrayList<>();
+        fileList.addAll(findFiles(storage));
+
+//        System.out.println("!!!!!" + fileList);
+        fileAdapter = new FileAdapter(getContext(), fileList, this);
+        recyclerView.setAdapter(fileAdapter);
+    }
+
+    @Override
+    public void onFileClicked(File file) {
+        if (file.isDirectory()) {
+            Bundle bundle = new Bundle();
+            bundle.putString("path", file.getAbsolutePath());
+            internalragment internalragment = new internalragment();
+            internalragment.setArguments(bundle);
+
+            requireActivity().getSupportFragmentManager().beginTransaction().replace(R.id.fragment_conteiner, internalragment)
+                    .addToBackStack(null).commit();
+        } else {
+            FileOpener.openFile(getContext(), file);
+        }
+    }
+
+    @Override
+    public void onFileLongClicked(File file) {
+        final Dialog optionDialog = new Dialog(getContext());
+        optionDialog.setContentView(R.layout.option_dialog);
+        optionDialog.setTitle("Select Options.");
+        ListView options = optionDialog.findViewById(R.id.list);
+
+        CustomAdapter customAdapter = new CustomAdapter();
+        options.setAdapter(customAdapter);
+        optionDialog.show();
+
+        options.setOnItemClickListener(new AdapterView.OnItemClickListener() {// установка на элементе  Details меню действие нажатие
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedItem = parent.getItemAtPosition(position).toString();
+
+                switch (selectedItem){
+                    case "Details":
+                        AlertDialog.Builder detailDialog = new AlertDialog.Builder(getContext());// нажатие на меню Details из контекста
+                detailDialog.setTitle("Details:");
+                final TextView details = new TextView(getContext());
+                detailDialog.setView(details);
+                        Date lastModified = new Date(file.lastModified());
+                        SimpleDateFormat formatted = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                        String formattedDate = formatted.format(lastModified);
+
+                        details.setText(String.format("File Name:" + file.getName() + "\n" + "Size: " +
+                                Formatter.formatShortFileSize(getContext(),file.length()) +"\n" + "Path: "
+                                +  file.getAbsolutePath() +"\n" +"last Modified:" + formattedDate)); // Инфомация о фаиле по нажатию на менб details
+
+                        details.setPadding(70,10,10,10); // отступы в контекстн7ом меню
+
+                        detailDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                            optionDialog.cancel();
+                            }
+                        });
+
+
+                AlertDialog alertDialogDetails = detailDialog.create();
+                alertDialogDetails.show();// показывает окно принажатии на details
+                break;
+                }
+
+            }
+        });
+    }
+
+    class CustomAdapter extends BaseAdapter {
+
+        @Override
+        public int getCount() {
+            return items.length;
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return items[position];
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {// меню для долгорго нажати я на кнопук мышки
+            @SuppressLint("ViewHolder") View myView = getLayoutInflater().inflate(R.layout.option_layout, null);
+
+            TextView txtOptions = myView.findViewById(R.id.txt_option);
+            ImageView imgOptions = myView.findViewById(R.id.img_option);
+            txtOptions.setText(items[position]);
+            if (items[position].equals("Details")) {
+                imgOptions.setImageResource(R.drawable.outline_chat_info_24);
+            } else if (items[position].equals("Rename")) {
+                imgOptions.setImageResource(R.drawable.outline_brush_24);
+            } else if (items[position].equals("Delete")) {
+                imgOptions.setImageResource(R.drawable.outline_delete_24);
+
+            }
+            return myView;
+        }
+    }
 }
