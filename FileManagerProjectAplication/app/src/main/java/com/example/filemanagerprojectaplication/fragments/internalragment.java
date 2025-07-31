@@ -26,9 +26,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.filemanagerprojectaplication.FileAdapter;
 import com.example.filemanagerprojectaplication.FileOpener;
@@ -96,9 +98,13 @@ public class internalragment extends Fragment implements OneFileSelectedListener
                 ActivityCompat.requestPermissions(getActivity(), new String[]
                         {Manifest.permission.READ_EXTERNAL_STORAGE}, 100); // -100 значит что нужно принять в работу и породолжить
 
-
             }
-            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) ==
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED) {// работает если не предоставлено разрешение
+                ActivityCompat.requestPermissions(getActivity(), new String[]
+                        {Manifest.permission.WRITE_EXTERNAL_STORAGE},100);
+            }
+            if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                     PackageManager.PERMISSION_GRANTED) {// работает если не предоставлено разрешение
                 displayFiles();
             }
@@ -184,7 +190,7 @@ public class internalragment extends Fragment implements OneFileSelectedListener
     }
 
     @Override
-    public void onFileLongClicked(File file) {
+    public void onFileLongClicked(File file, int position) {
         final Dialog optionDialog = new Dialog(getContext());
         optionDialog.setContentView(R.layout.option_dialog);
         optionDialog.setTitle("Select Options.");
@@ -199,37 +205,110 @@ public class internalragment extends Fragment implements OneFileSelectedListener
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedItem = parent.getItemAtPosition(position).toString();
 
-                switch (selectedItem){
+                switch (selectedItem) {
                     case "Details":
                         AlertDialog.Builder detailDialog = new AlertDialog.Builder(getContext());// нажатие на меню Details из контекста
-                detailDialog.setTitle("Details:");
-                final TextView details = new TextView(getContext());
-                detailDialog.setView(details);
+                        detailDialog.setTitle("Details:");
+                        final TextView details = new TextView(getContext());
+                        detailDialog.setView(details);
                         Date lastModified = new Date(file.lastModified());
                         SimpleDateFormat formatted = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                         String formattedDate = formatted.format(lastModified);
 
                         details.setText(String.format("File Name:" + file.getName() + "\n" + "Size: " +
-                                Formatter.formatShortFileSize(getContext(),file.length()) +"\n" + "Path: "
-                                +  file.getAbsolutePath() +"\n" +"last Modified:" + formattedDate)); // Инфомация о фаиле по нажатию на менб details
+                                Formatter.formatShortFileSize(getContext(), file.length()) + "\n" + "Path: "
+                                + file.getAbsolutePath() + "\n" + "last Modified:" + formattedDate)); // Инфомация о фаиле по нажатию на менб details
 
-                        details.setPadding(70,10,10,10); // отступы в контекстн7ом меню
+                        details.setPadding(70, 10, 10, 10); // отступы в контекстн7ом меню
 
                         detailDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                            optionDialog.cancel();
+                                optionDialog.cancel();
                             }
                         });
 
 
-                AlertDialog alertDialogDetails = detailDialog.create();
-                alertDialogDetails.show();// показывает окно принажатии на details
-                break;
-                }
+                        AlertDialog alertDialogDetails = detailDialog.create();
+                        alertDialogDetails.show();// показывает окно принажатии на details
+                        break;
 
+                    case "Rename":
+                        AlertDialog.Builder renameDialog = new AlertDialog.Builder(getContext());
+                        renameDialog.setTitle("Rename file:");
+                        final EditText name = new EditText(getContext()); // создали новый редактируемый текст прин нажатии контекстного меню rename
+                        renameDialog.setView(name);
+
+                        renameDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String newName = name.getEditableText().toString();
+
+
+                                File current = new File(file.getAbsolutePath()); // исходный фаил
+                                File destination;
+                                if (!file.isDirectory()) {
+                                    String extension = file.getAbsolutePath().substring(file.getAbsolutePath().lastIndexOf(".")); // Поиск расширение файла
+
+                                    destination = new File(file.getAbsolutePath().replace(file.getName(), newName) + extension);// нахлждение пути файла и замена его новое имя + расширкние
+                                } else {
+                                    destination = new File(file.getAbsolutePath().replace(file.getName(), newName));
+                                }
+                                    if (current.renameTo(destination)) { // если наш элемент переименовали расширение
+                                        fileList.set(position, destination); // добавление переименованного обьекста в список элеменнтов
+                                        fileAdapter.notifyItemChanged(position);// Если фаил не переименовался
+                                        Toast.makeText(getContext(), "Renamed!", Toast.LENGTH_SHORT).show();
+                                        displayFiles();
+                                    } else {
+                                        Toast.makeText(getContext(), "Couldn't Rename!", Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+
+                        });
+
+                        renameDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                optionDialog.cancel();
+                            }
+                        });
+
+                        AlertDialog alertDialogRename = renameDialog.create();
+                        alertDialogRename.show();
+                        break;
+                    case "Delete":
+                        AlertDialog.Builder deletedialog = new AlertDialog.Builder(getContext());
+                        deletedialog.setTitle("Delete " + file.getName() + "?");
+
+                        deletedialog.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                               file.delete();
+                               displayFiles();
+//                               fileList.remove(position);
+//                               fileList.clear();
+//                               fileList.addAll(findFiles(storage));
+//                               fileAdapter.notifyDataSetChanged();
+                                Toast.makeText(getContext(), "Delete file:" + file.getName(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                        deletedialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                optionDialog.cancel();
+                            }
+                        });
+
+                        AlertDialog alertDialogDelete = deletedialog.create();
+                        alertDialogDelete.show();
+                        break;
+                }
             }
         });
+
+
     }
 
     class CustomAdapter extends BaseAdapter {
